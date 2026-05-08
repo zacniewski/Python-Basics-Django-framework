@@ -10,10 +10,23 @@
 
 3. Add information about your app to INSTALLED_APPS list in ```settings.py``` configuration file.
 
-4. In ```views.py``` file of your ```myapp``` app create  function based view, that returns HttpResponse object. In the same file create  function based view, that returns JsonResponse object.
+4. In `views.py` file of your `myapp` app create function-based views:
+    * `hello_view`: returns `HttpResponse` with some text (e.g., "Hello World").
+    * `json_view`: returns `JsonResponse` with a dictionary (e.g., `{"message": "Hello from JSON"}`).
+
+### Example:
+```python
+from django.http import HttpResponse, JsonResponse
+
+def hello_view(request):
+    return HttpResponse("Hello World!")
+
+def json_view(request):
+    return JsonResponse({"message": "Hello from JSON"})
+```
 
 
-5. In your app (myapp) folder create file ```urls.py```. Import created views and create two different paths (for both views, for example 'hello/' and 'json/').
+5. In your app (myapp) folder create file `urls.py`. Import created views and create two different paths (for both views, for example 'hello/' and 'json/').
 
 6. In your project (mysite) folder update ```urls.py``` file by adding information about urls from your app. Use [include()](https://docs.djangoproject.com/en/3.2/ref/urls/#include) function.
 

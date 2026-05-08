@@ -46,32 +46,25 @@
 
 * The ```sessionid``` cookie contains a series of letters and numbers which Django uses to uniquely identify your session. From there, all your session details can be accessed - but only on the server side. Django uses this cookie to look up the session in the database where it stores all the server side cookies about that session.
 
-4. Reading and writing session data.  
-* more secure way to save session information is to store any such data on the server side. We can then use the ```sessionid``` cookie which is stored on the client side (but is effectively anonymous) as the key to unlock the data.
+4. Reading and writing session data.
+* More secure way to save session information is to store such data on the server side.
+* A Django request object has a `session` attribute that acts like a dictionary.
 
-* a ```sessionid``` cookie is still used to remember the client’s machine (so technically a browser side cookie exists), however all the data is stored server side.
+### Steps:
+1. **Write Session**: Create a view `create_session(request)` that sets `request.session['name'] = 'Pythonist'`.
+2. **Read Session**: Create a view `read_session(request)` that gets the value using `request.session.get('name', 'Guest')` and returns it in a `HttpResponse`.
+3. **Delete Session**: Create a view `delete_session(request)` that uses `del request.session['name']` or `request.session.flush()`.
 
-* a Django request object has a ```session``` attribute that acts like a dictionary.
+### Example:
+```python
+def create_session(request):
+    request.session['name'] = 'Pythonist'
+    return HttpResponse("Session data set.")
 
-* add view ```create_session``` that creates session variables - ```name```, ```surname``` and ```password``` (hard-coded values).
-
-* add url ```create-session``` for this view in app-level ```urls.py``` and remember about importing this view earlier!
-
-* in browser open link ```http://127.0.0.1:8000/create-session/``` to set session data.
-
-* add view ```read_session``` that reads created variables.
-
-* add url ```read-session``` for this view in app-level ```urls.py``` and remember about importing this view earlier!
-
-* in browser open link ```http://127.0.0.1:8000/read-session/``` to read your session data.
-
-* add view ```delete_session``` that deletes created variables.
-
-* add url ```delete-session``` for this view in app-level ```urls.py``` and remember about importing this view earlier!
-
-* in browser open link ```http://127.0.0.1:8000/delete-session/``` to delete your session data.
-
-* in browser open link ```http://127.0.0.1:8000/read-session/``` to read your current session data.
+def read_session(request):
+    name = request.session.get('name', 'Guest')
+    return HttpResponse(f"Hello, {name}!")
+```
 
 ## Input/Output:
 ```

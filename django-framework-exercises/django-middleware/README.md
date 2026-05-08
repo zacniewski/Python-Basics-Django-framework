@@ -16,24 +16,40 @@ the response passes through all middleware back in reverse order.
 * **Don't forget to activate you virtualenv!**  
 
 2. Creating a custom middleware
-*  **for now the only idea I have for this exercise is to create custom middleware, and I'm looking for a good concepts**
+*   **Task**: Create a custom middleware that logs the time it takes to process a request.
+*   In your app folder, create a new file `middleware.py` and define a class `ProcessTimeMiddleware`.
+*   Use the modern Django middleware style with `__init__` and `__call__` methods.
 
-* When adding a new middleware to the MIDDLEWARE setting, make sure to place it in the right position. Middleware are executed in 
-order of appearance in the setting during the request phase, and in reverse order for responses.
+### Steps:
+1. In `__call__`, record the start time using `time.time()`.
+2. Call `self.get_response(request)` to get the response.
+3. Calculate the duration (`current time - start time`).
+4. Add a custom header `X-Process-Time` to the response with this duration.
+5. Print or log the message: `Request to [path] took [duration]s`.
+6. **Register** your middleware by adding its full path (e.g., `'myapp.middleware.ProcessTimeMiddleware'`) to the `MIDDLEWARE` list in `settings.py`.
 
-* Middleware is a regular Python class that hooks into Django’s request/response life cycle. Those classes holds pieces of code that are processed upon every request/response your Django application handles.
+### Example Code:
+```python
+import time
 
-* The Middleware classes doesn’t have to subclass anything and it can live anywhere in your Python path. The only thing Django cares about is the path you register in the project settings MIDDLEWARE_CLASSES.
+class ProcessTimeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-* Your Middleware class should define at least one of the following methods:
+    def __call__(self, request):
+        start_time = time.time()
+        
+        response = self.get_response(request)
+        
+        duration = time.time() - start_time
+        response["X-Process-Time"] = str(duration)
+        print(f"Request to {request.path} took {duration:.4f}s")
+        
+        return response
+```
 
-    * Called during request:
-        * process_request(request)
-        * process_view(request, view_func, view_args, view_kwargs)
-    * Called during response:
-        * process_exception(request, exception) (only if the view raised an exception)
-        * process_template_response(request, response) (only for template responses)
-        process_response(request, response)
+### Verification:
+Open your browser, go to `http://127.0.0.1:8000/`, and check the **Network** tab in Developer Tools. Look for the `X-Process-Time` header in the response.
 
 
 ## Input/Output:

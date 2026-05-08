@@ -11,13 +11,27 @@ code works as expected. Fortunately Django comes with robust, built-in testing t
 * **Don't forget to activate you virtualenv!**  
 
 2. Testing with SimpleTestCase
-*  Read the documentation of Django's [SimpleTestCase](https://docs.djangoproject.com/en/3.2/topics/testing/tools/#django.test.SimpleTestCase). It is recommended testing tool, when we **don't** work with databases. If you are using a database, then instead use [TestCase](https://docs.djangoproject.com/en/3.2/topics/testing/tools/#testcase).
+* Read the documentation of Django's [SimpleTestCase](https://docs.djangoproject.com/en/3.2/topics/testing/tools/#django.test.SimpleTestCase).
+* Create a class `SimpleTests` that derives from `SimpleTestCase`.
 
-* create class SimpleTests that derives from built-in SimpleTestCase class. In this class:
-      * create method ```test_home_page_status_code``` to test status of starting page of the project ('/')
-      * create method ```test_about_page_status_code``` to test status of starting page of the project ('/')  
+### Example `tests.py`:
+```python
+from django.test import SimpleTestCase
+from django.urls import reverse
 
-* run tests with command ```python manage.py test``` 
+class SimpleTests(SimpleTestCase):
+    def test_home_page_status_code(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_about_page_status_code(self):
+        # Assuming you have an 'about' URL named 'about'
+        # response = self.client.get(reverse('about'))
+        response = self.client.get('/about/')
+        self.assertEqual(response.status_code, 200)
+```
+
+* Run tests with command: `python manage.py test`
 
 * write test for the page that doesn't exist, for example ```contact/``` page. 
 

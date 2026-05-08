@@ -11,8 +11,17 @@
 *  You can use elements from [ready-to-use](https://startbootstrap.com/template/bare)  templates or just create HTML file with [basic](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure) structure.   
 *  For now use only HTML. Add some paragraphs  and headers to ```body``` section and empty [block](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#block) for overriding by child templates (name this block 'content'). CSS and JavaScript files will be added later. 
 
-3. Create next app-level template ```about.html``` in the same ```myapp/templates/myapp/``` directory. Use template  extending of ```base.html``` template. Add few HTML tags inside 'content' block.  
-Hint: use [extends](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#extends) template tag.  
+3. Create next app-level template `about.html` in the same `myapp/templates/myapp/` directory. Use template extending of `base.html` template. Add few HTML tags inside 'content' block.
+
+### Example `about.html`:
+```html
+{% extends "myapp/base.html" %}
+
+{% block content %}
+    <h2>About Us</h2>
+    <p>This is a page created using Django templates!</p>
+{% endblock %}
+```
 
 4. In ```views.py``` file of your ```myapp``` app:  
 * add another  function based view (named for example ```base_view```), that uses [render](https://docs.djangoproject.com/en/3.2/topics/http/shortcuts/#render) function with previously created template ```base.html```,
